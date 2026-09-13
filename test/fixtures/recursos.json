@@ -1,0 +1,140 @@
+[
+  {
+    "resource": "sedes",
+    "body": {
+      "nombre": "Sede Nueva",
+      "direccion": "Zona 10, Guatemala",
+      "telefono": "2222-9999",
+      "activo": true
+    }
+  },
+  {
+    "resource": "clientes",
+    "body": {
+      "nombre": "Cliente Nuevo",
+      "nit": "7777777-7",
+      "telefono": "5555-7777",
+      "correo": "cliente@demo.com",
+      "activo": true
+    }
+  },
+  {
+    "resource": "tipos-vehiculos",
+    "body": {
+      "nombre": "Camioneta",
+      "descripcion": "Vehículo familiar",
+      "activo": true
+    }
+  },
+  {
+    "resource": "vehiculos",
+    "body": {
+      "cliente_id": 1,
+      "tipo_vehiculo_id": 2,
+      "placa": "P999XYZ",
+      "marca": "Mazda",
+      "modelo": "3",
+      "color": "Rojo",
+      "activo": true
+    }
+  },
+  {
+    "resource": "tarifas",
+    "body": {
+      "sede_id": 1,
+      "tipo_vehiculo_id": 2,
+      "nombre": "Tarifa prueba",
+      "precio_hora": 10,
+      "precio_dia": 80,
+      "activo": true
+    }
+  },
+  {
+    "resource": "espacios",
+    "body": {
+      "sede_id": 1,
+      "tipo_vehiculo_id": 2,
+      "codigo": "A-099",
+      "nivel": "1",
+      "estado": "DISPONIBLE",
+      "activo": true
+    }
+  },
+  {
+    "resource": "empleados",
+    "body": {
+      "sede_id": 1,
+      "nombre": "Empleado Nuevo",
+      "dpi": "9999999999999",
+      "puesto": "Cajero",
+      "telefono": "5555-9999",
+      "activo": true
+    }
+  },
+  {
+    "resource": "turnos",
+    "body": {
+      "empleado_id": 1,
+      "fecha": "2026-09-13",
+      "hora_inicio": "08:00:00",
+      "hora_fin": "16:00:00",
+      "activo": true
+    }
+  },
+  {
+    "resource": "reservaciones",
+    "body": {
+      "cliente_id": 1,
+      "vehiculo_id": 1,
+      "espacio_id": 1,
+      "fecha_reserva": "2026-09-13",
+      "hora_inicio": "09:00:00",
+      "hora_fin": "11:00:00",
+      "estado": "PENDIENTE"
+    }
+  },
+  {
+    "resource": "entradas",
+    "body": {
+      "vehiculo_id": 1,
+      "espacio_id": 1,
+      "empleado_id": 1,
+      "fecha_hora_entrada": "2026-09-13T09:00:00",
+      "observacion": "Prueba"
+    }
+  },
+  {
+    "resource": "salidas",
+    "body": {
+      "entrada_id": 1,
+      "empleado_id": 1,
+      "fecha_hora_salida": "2026-09-13T12:00:00",
+      "total_horas": 3,
+      "monto_calculado": 30
+    }
+  },
+  {
+    "resource": "pagos",
+    "body": {
+      "salida_id": 1,
+      "cliente_id": 1,
+      "monto": 30,
+      "metodo_pago": "EFECTIVO",
+      "fecha_pago": "2026-09-13T12:05:00",
+      "referencia": "TEST-001",
+      "estado": "PAGADO"
+    }
+  },
+  {
+    "resource": "incidencias",
+    "body": {
+      "sede_id": 1,
+      "empleado_id": 1,
+      "vehiculo_id": 1,
+      "tipo": "PRUEBA",
+      "descripcion": "Incidencia de prueba",
+      "fecha_hora": "2026-09-13T12:10:00",
+      "estado": "ABIERTA"
+    }
+  }
+]
