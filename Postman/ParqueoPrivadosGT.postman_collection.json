@@ -1,0 +1,1561 @@
+{
+  "info": {
+    "name": "Parqueo Privados GT - Práctica Semana 9",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "CRUD completo NestJS + PostgreSQL"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    },
+    {
+      "key": "loginToken",
+      "value": ""
+    },
+    {
+      "key": "sessionToken",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Login - obtiene loginToken y sessionToken",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json?.data?.loginToken) pm.collectionVariables.set('loginToken', json.data.loginToken);",
+                  "if (json?.data?.sessionToken) pm.collectionVariables.set('sessionToken', json.data.sessionToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuario\": \"admin\",\n  \"password\": \"Admin123*\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Renovar token de sesión",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json?.data?.sessionToken) pm.collectionVariables.set('sessionToken', json.data.sessionToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{loginToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/renovar-sesion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "renovar-sesion"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Logout - invalida la sesión",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code < 300) pm.collectionVariables.set('sessionToken', '');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{loginToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "sedes",
+      "item": [
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/sedes/consultar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sedes",
+                "consultar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/sedes/buscar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sedes",
+                "buscar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Sede Nueva\",\n  \"direccion\": \"Zona 10, Guatemala\",\n  \"telefono\": \"2222-9999\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sedes/agregar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sedes",
+                "agregar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Sede Nueva\",\n  \"direccion\": \"Zona 10, Guatemala\",\n  \"telefono\": \"2222-9999\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sedes/editar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sedes",
+                "editar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/sedes/eliminar/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sedes",
+                "eliminar",
+                "9999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "clientes",
+      "item": [
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/clientes/consultar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "consultar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/clientes/buscar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "buscar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cliente Nuevo\",\n  \"nit\": \"7777777-7\",\n  \"telefono\": \"5555-7777\",\n  \"correo\": \"cliente@demo.com\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/clientes/agregar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "agregar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cliente Nuevo\",\n  \"nit\": \"7777777-7\",\n  \"telefono\": \"5555-7777\",\n  \"correo\": \"cliente@demo.com\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/clientes/editar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "editar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/clientes/eliminar/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "clientes",
+                "eliminar",
+                "9999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "tipos-vehiculos",
+      "item": [
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/tipos-vehiculos/consultar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tipos-vehiculos",
+                "consultar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/tipos-vehiculos/buscar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tipos-vehiculos",
+                "buscar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Camioneta\",\n  \"descripcion\": \"Vehículo familiar\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tipos-vehiculos/agregar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tipos-vehiculos",
+                "agregar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Camioneta\",\n  \"descripcion\": \"Vehículo familiar\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tipos-vehiculos/editar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tipos-vehiculos",
+                "editar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/tipos-vehiculos/eliminar/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tipos-vehiculos",
+                "eliminar",
+                "9999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "vehiculos",
+      "item": [
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/consultar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "consultar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/buscar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "buscar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cliente_id\": 1,\n  \"tipo_vehiculo_id\": 2,\n  \"placa\": \"P999XYZ\",\n  \"marca\": \"Mazda\",\n  \"modelo\": \"3\",\n  \"color\": \"Rojo\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/agregar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "agregar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cliente_id\": 1,\n  \"tipo_vehiculo_id\": 2,\n  \"placa\": \"P999XYZ\",\n  \"marca\": \"Mazda\",\n  \"modelo\": \"3\",\n  \"color\": \"Rojo\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/editar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "editar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/eliminar/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vehiculos",
+                "eliminar",
+                "9999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "tarifas",
+      "item": [
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/tarifas/consultar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tarifas",
+                "consultar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/tarifas/buscar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tarifas",
+                "buscar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sede_id\": 1,\n  \"tipo_vehiculo_id\": 2,\n  \"nombre\": \"Tarifa prueba\",\n  \"precio_hora\": 10,\n  \"precio_dia\": 80,\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tarifas/agregar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tarifas",
+                "agregar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sede_id\": 1,\n  \"tipo_vehiculo_id\": 2,\n  \"nombre\": \"Tarifa prueba\",\n  \"precio_hora\": 10,\n  \"precio_dia\": 80,\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tarifas/editar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tarifas",
+                "editar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/tarifas/eliminar/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tarifas",
+                "eliminar",
+                "9999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "espacios",
+      "item": [
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/espacios/consultar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "espacios",
+                "consultar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/espacios/buscar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "espacios",
+                "buscar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sede_id\": 1,\n  \"tipo_vehiculo_id\": 2,\n  \"codigo\": \"A-099\",\n  \"nivel\": \"1\",\n  \"estado\": \"DISPONIBLE\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/espacios/agregar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "espacios",
+                "agregar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sede_id\": 1,\n  \"tipo_vehiculo_id\": 2,\n  \"codigo\": \"A-099\",\n  \"nivel\": \"1\",\n  \"estado\": \"DISPONIBLE\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/espacios/editar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "espacios",
+                "editar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/espacios/eliminar/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "espacios",
+                "eliminar",
+                "9999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "empleados",
+      "item": [
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/empleados/consultar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "empleados",
+                "consultar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/empleados/buscar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "empleados",
+                "buscar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sede_id\": 1,\n  \"nombre\": \"Empleado Nuevo\",\n  \"dpi\": \"9999999999999\",\n  \"puesto\": \"Cajero\",\n  \"telefono\": \"5555-9999\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/empleados/agregar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "empleados",
+                "agregar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sede_id\": 1,\n  \"nombre\": \"Empleado Nuevo\",\n  \"dpi\": \"9999999999999\",\n  \"puesto\": \"Cajero\",\n  \"telefono\": \"5555-9999\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/empleados/editar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "empleados",
+                "editar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/empleados/eliminar/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "empleados",
+                "eliminar",
+                "9999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "turnos",
+      "item": [
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/turnos/consultar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "turnos",
+                "consultar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/turnos/buscar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "turnos",
+                "buscar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"empleado_id\": 1,\n  \"fecha\": \"2026-09-13\",\n  \"hora_inicio\": \"08:00:00\",\n  \"hora_fin\": \"16:00:00\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/turnos/agregar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "turnos",
+                "agregar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"empleado_id\": 1,\n  \"fecha\": \"2026-09-13\",\n  \"hora_inicio\": \"08:00:00\",\n  \"hora_fin\": \"16:00:00\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/turnos/editar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "turnos",
+                "editar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/turnos/eliminar/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "turnos",
+                "eliminar",
+                "9999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "reservaciones",
+      "item": [
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reservaciones/consultar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reservaciones",
+                "consultar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reservaciones/buscar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reservaciones",
+                "buscar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cliente_id\": 1,\n  \"vehiculo_id\": 1,\n  \"espacio_id\": 1,\n  \"fecha_reserva\": \"2026-09-13\",\n  \"hora_inicio\": \"09:00:00\",\n  \"hora_fin\": \"11:00:00\",\n  \"estado\": \"PENDIENTE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/reservaciones/agregar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reservaciones",
+                "agregar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cliente_id\": 1,\n  \"vehiculo_id\": 1,\n  \"espacio_id\": 1,\n  \"fecha_reserva\": \"2026-09-13\",\n  \"hora_inicio\": \"09:00:00\",\n  \"hora_fin\": \"11:00:00\",\n  \"estado\": \"PENDIENTE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/reservaciones/editar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reservaciones",
+                "editar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/reservaciones/eliminar/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reservaciones",
+                "eliminar",
+                "9999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "entradas",
+      "item": [
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/entradas/consultar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "entradas",
+                "consultar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/entradas/buscar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "entradas",
+                "buscar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehiculo_id\": 1,\n  \"espacio_id\": 1,\n  \"empleado_id\": 1,\n  \"fecha_hora_entrada\": \"2026-09-13T09:00:00\",\n  \"observacion\": \"Prueba\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/entradas/agregar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "entradas",
+                "agregar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehiculo_id\": 1,\n  \"espacio_id\": 1,\n  \"empleado_id\": 1,\n  \"fecha_hora_entrada\": \"2026-09-13T09:00:00\",\n  \"observacion\": \"Prueba\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/entradas/editar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "entradas",
+                "editar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/entradas/eliminar/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "entradas",
+                "eliminar",
+                "9999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "salidas",
+      "item": [
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/salidas/consultar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "salidas",
+                "consultar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/salidas/buscar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "salidas",
+                "buscar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"entrada_id\": 1,\n  \"empleado_id\": 1,\n  \"fecha_hora_salida\": \"2026-09-13T12:00:00\",\n  \"total_horas\": 3,\n  \"monto_calculado\": 30\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/salidas/agregar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "salidas",
+                "agregar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"entrada_id\": 1,\n  \"empleado_id\": 1,\n  \"fecha_hora_salida\": \"2026-09-13T12:00:00\",\n  \"total_horas\": 3,\n  \"monto_calculado\": 30\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/salidas/editar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "salidas",
+                "editar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/salidas/eliminar/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "salidas",
+                "eliminar",
+                "9999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "pagos",
+      "item": [
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/pagos/consultar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pagos",
+                "consultar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/pagos/buscar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pagos",
+                "buscar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"salida_id\": 1,\n  \"cliente_id\": 1,\n  \"monto\": 30,\n  \"metodo_pago\": \"EFECTIVO\",\n  \"fecha_pago\": \"2026-09-13T12:05:00\",\n  \"referencia\": \"TEST-001\",\n  \"estado\": \"PAGADO\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pagos/agregar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pagos",
+                "agregar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"salida_id\": 1,\n  \"cliente_id\": 1,\n  \"monto\": 30,\n  \"metodo_pago\": \"EFECTIVO\",\n  \"fecha_pago\": \"2026-09-13T12:05:00\",\n  \"referencia\": \"TEST-001\",\n  \"estado\": \"PAGADO\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pagos/editar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pagos",
+                "editar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/pagos/eliminar/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pagos",
+                "eliminar",
+                "9999"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "incidencias",
+      "item": [
+        {
+          "name": "Consultar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/incidencias/consultar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "incidencias",
+                "consultar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/incidencias/buscar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "incidencias",
+                "buscar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sede_id\": 1,\n  \"empleado_id\": 1,\n  \"vehiculo_id\": 1,\n  \"tipo\": \"PRUEBA\",\n  \"descripcion\": \"Incidencia de prueba\",\n  \"fecha_hora\": \"2026-09-13T12:10:00\",\n  \"estado\": \"ABIERTA\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/incidencias/agregar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "incidencias",
+                "agregar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sede_id\": 1,\n  \"empleado_id\": 1,\n  \"vehiculo_id\": 1,\n  \"tipo\": \"PRUEBA\",\n  \"descripcion\": \"Incidencia de prueba\",\n  \"fecha_hora\": \"2026-09-13T12:10:00\",\n  \"estado\": \"ABIERTA\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/incidencias/editar/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "incidencias",
+                "editar",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/incidencias/eliminar/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "incidencias",
+                "eliminar",
+                "9999"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{sessionToken}}",
+        "type": "string"
+      }
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+ARQUITECTURA
+============
+Postman
+   |
+   v
+NestJS Controller
+   |
+   v
+Service
+   |
+   v
+Repository (acceso a datos)
+   |
+   v
+DatabaseService (Pool pg)
+   |
+   v
+Stored Procedure / Function PostgreSQL
+   |
+   v
+Tablas PostgreSQL
+
+La respuesta retorna JSON con: exito, mensaje y data.
+
+SEGURIDAD JWT
+POST /api/auth/login
+  -> AuthController -> AuthService -> AuthRepository -> PostgreSQL
+  -> entrega loginToken + sessionToken
+
+CRUD protegido
+Cliente/Postman/Swagger -> Authorization: Bearer <sessionToken>
+  -> SessionJwtGuard
+  -> valida firma JWT + sesión activa en PostgreSQL
+  -> Controller -> Service -> Repository -> Stored Procedure
+
+Logout
+Authorization: Bearer <loginToken> -> POST /api/auth/logout
+  -> cierra sesiones_usuario.activa = false
+  -> el sessionToken queda invalidado inmediatamente.
